@@ -14,3 +14,8 @@ venv/
 
 # IDE
 .vscode/
+
+# Test audio
+*.m4a
+*.wav
+*.mp3
