@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile , File 
 from pydantic import BaseModel
 from ai import generate_answer
+from transcription import transcribe_audio
 
 app = FastAPI()
 
@@ -17,6 +18,19 @@ def ask_ai(data : Question ):
     return {
         "question" : data.question , 
         "answer" : answer 
+    }
+@app.post("/transcribe")
+async def transcribe(file: UploadFile = File(...)):
+    contents = await file.read()
+
+    with open(file.filename, "wb") as f:
+        f.write(contents)
+
+    transcript = transcribe_audio(file.filename)
+
+    return {
+        "filename": file.filename,
+        "transcript": transcript
     }
 @app.get("/health")
 def health():
