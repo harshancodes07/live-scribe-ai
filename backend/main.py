@@ -19,7 +19,7 @@ def ask_ai(data : Question ):
         "question" : data.question , 
         "answer" : answer 
     }
-@app.post("/transcribe")
+@app.post("/transcribe") 
 async def transcribe(file: UploadFile = File(...)):
     contents = await file.read()
 
@@ -28,10 +28,13 @@ async def transcribe(file: UploadFile = File(...)):
 
     transcript = transcribe_audio(file.filename)
 
+    answer = generate_answer(transcript)
+
     return {
         "filename": file.filename,
-        "transcript": transcript
-    }
+        "transcript": transcript,
+        "answer" : answer 
+    }   
 @app.get("/health")
 def health():
     return {
